@@ -46,7 +46,7 @@ main {
 
 .movies-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
   max-width: 1200px;
   justify-content: center;
@@ -88,6 +88,7 @@ main {
   font-size: 14px;
   border: 1px solid #ddd;
   object-fit: cover;
+  margin: 0 auto;
 }
 
 /* Skeleton Loading */

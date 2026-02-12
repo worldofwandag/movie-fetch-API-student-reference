@@ -8,6 +8,17 @@ const sortSelect = document.querySelector('#sortSelect');
 
 let currentMovies = [];
 
+// Event Listeners
+searchForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const searchTerm = searchInput.value.trim();
+  if (searchTerm) {
+    fetchMovies(searchTerm);
+  }
+});
+
+
+
 // Show skeleton loading cards
 function showSkeletons() {
   const skeletons = Array(10).fill(0).map(() => `
@@ -34,6 +45,7 @@ async function fetchMovies(searchTerm) {
     sortSelect.value = 'default';
     displayMovies(currentMovies);
   } else {
+    resultsInfo.textContent = `Showing: ${searchTerm}`;
     moviesGrid.innerHTML = '<p>No movies found.</p>';
     currentMovies = [];
   }
@@ -46,7 +58,7 @@ function displayMovies(movies) {
 
     return `
       <div class="movie-card">
-        ${poster ? `<img class="movie-card__img" src="${poster}" alt="${movie.Title}" onerror="handleImageError(this)">` : `<div class="movie-card__poster-placeholder">Movie Poster<br>Not Available</div>`}
+        ${poster ? `<img class="movie-card__img" src="${poster}" alt="${movie.Title}">` : `<div class="movie-card__poster-placeholder">Movie Poster<br>Not Available</div>`}
         <h2 class="movie-card__title">${movie.Title}</h2>
         <p class="movie-card__year">${movie.Year}</p>
       </div>
@@ -54,17 +66,24 @@ function displayMovies(movies) {
   }).join('');
 
   moviesGrid.innerHTML = html;
-}
-
-// Handle image loading errors
-function handleImageError(img) {
-  const placeholder = document.createElement('div');
-  placeholder.className = 'movie-card__poster-placeholder';
-  placeholder.innerHTML = 'Movie Poster<br>Not Available';
-  img.parentNode.replaceChild(placeholder, img);
+  
+  // Add error listeners after DOM insertion
+  moviesGrid.querySelectorAll('.movie-card__img').forEach(img => {
+    img.addEventListener('error', () => {
+      const placeholder = document.createElement('div');
+      placeholder.className = 'movie-card__poster-placeholder';
+      placeholder.innerHTML = 'Movie Poster<br>Not Available';
+      img.replaceWith(placeholder);
+    });
+  });
 }
 
 // Sort movies
+
+sortSelect.addEventListener('change', (e) => {
+  sortMovies(e.target.value);
+});
+
 function sortMovies(sortType) {
   let sortedMovies = [...currentMovies];
 
@@ -81,18 +100,7 @@ function sortMovies(sortType) {
   displayMovies(sortedMovies);
 }
 
-// Event Listeners
-searchForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const searchTerm = searchInput.value.trim();
-  if (searchTerm) {
-    fetchMovies(searchTerm);
-  }
-});
 
-sortSelect.addEventListener('change', (e) => {
-  sortMovies(e.target.value);
-});
 
 // Load Marvel movies on start
 fetchMovies('Marvel');
