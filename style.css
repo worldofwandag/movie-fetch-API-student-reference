@@ -92,8 +92,9 @@ main {
 
 /* Skeleton Loading */
 .movie-card--skeleton {
-  width: 180px;
   background: #e0e0e0;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .movie-card__img--skeleton {

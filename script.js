@@ -10,7 +10,7 @@ let currentMovies = [];
 
 // Show skeleton loading cards
 function showSkeletons() {
-  const skeletons = Array.from({ length: 8 }).map(() => `
+  const skeletons = Array(10).fill(0).map(() => `
     <div class="movie-card movie-card--skeleton">
       <div class="movie-card__img movie-card__img--skeleton"></div>
       <div class="movie-card__title movie-card__title--skeleton"></div>
@@ -82,7 +82,7 @@ function sortMovies(sortType) {
 }
 
 // Event Listeners
-searchForm.addEventListener('submit', function(e) {
+searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const searchTerm = searchInput.value.trim();
   if (searchTerm) {
@@ -90,7 +90,7 @@ searchForm.addEventListener('submit', function(e) {
   }
 });
 
-sortSelect.addEventListener('change', function(e) {
+sortSelect.addEventListener('change', (e) => {
   sortMovies(e.target.value);
 });
 
